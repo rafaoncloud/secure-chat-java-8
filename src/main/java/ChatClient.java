@@ -16,7 +16,7 @@ public class ChatClient implements Runnable
     private ChatClientThread client    = null;
 
     // Cryptography - Added
-    private SymmetricCryptography crypt = null;
+    private SymmetricEncryption crypt = null;
 
     public ChatClient(String serverName, int serverPort)
     {  
@@ -144,7 +144,7 @@ public class ChatClient implements Runnable
         SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 
         System.out.println("[LOG] Installing Key...");
-        crypt = new SymmetricCryptography(key);
+        crypt = new SymmetricEncryption(key);
     }
 
     

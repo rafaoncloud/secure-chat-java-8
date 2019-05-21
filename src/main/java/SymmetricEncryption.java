@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import java.util.Base64;
 
-public class SymmetricCryptography 
+public class SymmetricEncryption
 {
 
     public static final int INITIALIZATION_VECTOR_SIZE = 16;
@@ -18,7 +18,7 @@ public class SymmetricCryptography
     public static void main(String[] args) 
         throws Exception 
     {
-        SymmetricCryptography crypto = new SymmetricCryptography();
+        SymmetricEncryption  crypto = new SymmetricEncryption();
 
         String plaintext = "[Test] Secret Message";
         System.out.println(plaintext);
@@ -36,38 +36,49 @@ public class SymmetricCryptography
         return encrypt(generateIV(), plaintext);
     }
 
-    public String encrypt(byte[] iv, String plaintext) 
-        throws Exception 
+    public String encrypt(byte[] iv, String plaintext)
+            throws Exception
     {
         byte[] decrypted = plaintext.getBytes("UTF-8");
-        byte[] encrypted = encrypt( iv, decrypted );
+        byte[] mac = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
+        byte[] encrypted = encrypt(iv, decrypted);
+
         StringBuilder ciphertext = new StringBuilder();
         ciphertext.append(Base64.getEncoder().encodeToString(iv));
         ciphertext.append(":");
         ciphertext.append(Base64.getEncoder().encodeToString(encrypted));
+        ciphertext.append(":");
+        ciphertext.append(Base64.getEncoder().encodeToString(mac));
         return ciphertext.toString();
     }
 
-    public String decrypt(String ciphertext) 
-        throws Exception 
+    public String decrypt(String ciphertext)
+            throws Exception
     {
         String[] parts = ciphertext.split(":");
 
         byte[] iv = Base64.getDecoder().decode(parts[0]);
         byte[] encrypted = Base64.getDecoder().decode(parts[1]);
         byte[] decrypted = decrypt(iv, encrypted);
+        byte[] mac1 = Base64.getDecoder().decode(parts[2]);
+
+        byte[] mac2 = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
+        if(!IntegrityCrypto.compareMAC(mac1,mac2))
+        {
+            throw new Exception("Integrity was compromised (Received MAC1 != Generated MAC) !!!");
+        }
 
         return new String(decrypted);
     }
 
     private Key key;
 
-    public SymmetricCryptography(Key key) 
+    public SymmetricEncryption(Key key)
     {
         this.key = key;
     }
     
-    public SymmetricCryptography() 
+    public SymmetricEncryption()
         throws Exception 
     {
         this(generateSymmetricKey());
@@ -76,6 +87,16 @@ public class SymmetricCryptography
     public Key getKey() 
     {
         return key;
+    }
+
+    public String getKeyEnconded()
+    {
+        return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
+
+    public byte[] getKeyDecoded()
+    {
+        return key.getEncoded();
     }
 
     public void setKey(Key key) 

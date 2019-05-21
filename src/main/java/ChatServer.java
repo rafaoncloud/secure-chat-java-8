@@ -19,7 +19,7 @@ public class ChatServer implements Runnable
 	private int clientCount = 0;
 
 	// Added
-	SymmetricCryptography[] crypt = new SymmetricCryptography[MAX_CLIENTS];
+	SymmetricEncryption[] crypt = new SymmetricEncryption[MAX_CLIENTS];
 
 	public ChatServer(int port)
 	{
@@ -163,7 +163,7 @@ public class ChatServer implements Runnable
 			clients[clientCount] = new ChatServerThread(this, socket);
 
 			System.out.println("[LOG] Generating Symmetric Key..."); // Added
-			crypt[clientCount] = new SymmetricCryptography(); // Added
+			crypt[clientCount] = new SymmetricEncryption(); // Added
 
 			try
 			{

@@ -2,25 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="883e8a4b-d6fa-4611-ac3b-c6b0065aec0c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AsymmetricCryptography.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatClientThread.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ChatServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChatServerThread.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GenerateKeyPair.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GenerateKeyPair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/privateKey1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/privateKey2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/privateKeyServer" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/publicKey1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/publicKey2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/KeyPair/publicKeyServer" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SymmetricCryptography.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SymmetricCryptography.java" beforeDir="false" afterPath="$PROJECT_DIR$/SymmetricCryptography.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-test-symmetric.sh" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/IntegrityCrypto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/AsymmetricCryptography.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/GenerateKeyPair.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/ChatClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chat/main/java/ChatClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/ChatServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chat/main/java/ChatServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/privateKey1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/privateKey2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/privateKeyServer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/publicKey1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/publicKey2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/KeyPair/publicKeyServer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chat/main/java/SymmetricCryptography.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/AsymmetricCryptography.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ChatClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ChatServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GenerateKeyPair.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/privateKey1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/privateKey2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/privateKeyServer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/publicKey1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/publicKey2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyPair/publicKeyServer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SymmetricCryptography.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,11 +35,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ChatClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="209" column="12" lean-forward="true" selection-start-line="209" selection-start-column="12" selection-end-line="209" selection-end-column="60" />
+            <state relative-caret-position="209">
+              <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/SymmetricEncryption.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/IntegrityCrypto.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="24" lean-forward="true" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -45,37 +71,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ChatServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="164" column="35" selection-start-line="164" selection-start-column="33" selection-end-line="164" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/SymmetricCryptography.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="110" column="25" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="25" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="-265">
+              <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>toString</find>
-      <find>decrypt</find>
       <find>Out</find>
       <find>KeyStore</find>
       <find>streamOut</find>
       <find>write</find>
       <find>Receiving</find>
-      <find>LOG</find>
+      <find>decrypt</find>
       <find>LO</find>
+      <find>LOG</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,6 +110,8 @@
         <option value="$PROJECT_DIR$/src/main/java/SymmetricCryptography.java" />
         <option value="$PROJECT_DIR$/src/main/java/ChatServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/ChatClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SymmetricEncryption.java" />
+        <option value="$PROJECT_DIR$/src/main/java/IntegrityCrypto.java" />
       </list>
     </option>
   </component>
@@ -122,6 +145,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="chat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="ChatClient.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -131,7 +161,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558457673485" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558476576730" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -189,6 +219,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="IntegrityCrypto" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.java.IntegrityCrypto" />
+      <module name="chat" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SymmetricCryptography (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.java.SymmetricCryptography" />
       <module name="chat" />
@@ -203,10 +247,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SymmetricCryptography" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SymmetricCryptography" />
+    <configuration name="SymmetricEncryption" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.java.SymmetricEncryption" />
       <module name="chat" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.java.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -237,15 +287,17 @@
       <item itemvalue="Application.ChatClient-2" />
       <item itemvalue="Application.ChatClient" />
       <item itemvalue="Application.ChatServer" />
-      <item itemvalue="Application.SymmetricCryptography" />
       <item itemvalue="Application.SymmetricCryptography (1)" />
+      <item itemvalue="Application.IntegrityCrypto" />
+      <item itemvalue="Application.SymmetricEncryption" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.ChatClient" />
         <item itemvalue="Application.ChatServer" />
+        <item itemvalue="Application.SymmetricEncryption" />
+        <item itemvalue="Application.IntegrityCrypto" />
         <item itemvalue="Application.SymmetricCryptography (1)" />
-        <item itemvalue="Application.SymmetricCryptography" />
       </list>
     </recent_temporary>
   </component>
@@ -262,12 +314,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558449560373</updated>
-      <workItem from="1558449570210" duration="6111000" />
+      <workItem from="1558449570210" duration="11669000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6111000" />
+    <option name="totallyTimeSpent" value="11669000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="777" extended-state="0" />
@@ -278,17 +330,17 @@
       <window_info id="UI Designer" />
       <window_info id="Capture Tool" />
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4509804" visible="true" weight="0.1898223" />
-      <window_info id="Structure" order="1" sideWeight="0.54901963" side_tool="true" visible="true" weight="0.1898223" />
-      <window_info anchor="bottom" id="Messages" sideWeight="0.49919224" weight="0.20437956" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.45182014" visible="true" weight="0.1898223" />
+      <window_info id="Structure" order="1" sideWeight="0.54817986" side_tool="true" visible="true" weight="0.1898223" />
+      <window_info anchor="bottom" id="Messages" sideWeight="0.49757674" weight="0.20437956" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" sideWeight="0.5016155" side_tool="true" visible="true" weight="0.329927" />
+      <window_info anchor="bottom" id="Event Log" sideWeight="0.50403875" side_tool="true" weight="0.31824818" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4983845" visible="true" weight="0.329927" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.329927" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49596122" visible="true" weight="0.31824818" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983845" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -374,16 +426,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SymmetricCryptography.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="110" column="25" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../STI/Trabalhos/Trabalho 3/Src/ChatServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
@@ -394,17 +436,75 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home/jre/lib/jce.jar!/javax/crypto/Cipher.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="829" selection-start-line="829" selection-end-line="829" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SymmetricCryptography.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="32" lean-forward="true" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ChatServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="164" column="35" selection-start-line="164" selection-start-column="33" selection-end-line="164" selection-end-column="35" />
+        <state relative-caret-position="-265">
+          <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/AsymmetricCryptography.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/GenerateKeyPair.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="74" column="5" lean-forward="true" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SymmetricEncryption.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="60" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ChatClient.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="209" column="12" lean-forward="true" selection-start-line="209" selection-start-column="12" selection-end-line="209" selection-end-column="60" />
+        <state relative-caret-position="209">
+          <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../STI/Trabalhos/Trabalho 3/Src/ChatClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="39">
+          <caret line="15" column="46" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/IntegrityCrypto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="24" lean-forward="true" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
