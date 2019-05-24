@@ -1,1 +1,0 @@
-java -classpath ./out/production/chat/main/java ChatServer.class localhost 8080

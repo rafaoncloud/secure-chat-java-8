@@ -6,7 +6,10 @@ import java.io.*;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 
 public class ChatServer implements Runnable
@@ -18,11 +21,22 @@ public class ChatServer implements Runnable
 	private Thread thread = null;
 	private int clientCount = 0;
 
-	// Added
+	// Added - Access Control
+	private boolean hasAccessControl = false;
+	private List<String> refusedAddrs = null;
+
+	// Added - Cryptography
 	SymmetricEncryption[] crypt = new SymmetricEncryption[MAX_CLIENTS];
 
-	public ChatServer(int port)
+	public ChatServer(int port, boolean hasAccessControl, List<String> refusedAddrs)
 	{
+		// Drops connection coming from certain addresses
+		if(hasAccessControl)
+		{
+			this.hasAccessControl = hasAccessControl;
+			this.refusedAddrs = refusedAddrs;
+		}
+
 		try
 		{
 			// Binds to port and starts server
@@ -40,7 +54,6 @@ public class ChatServer implements Runnable
 
 	public void run()
 	{
-
 		while (thread != null)
 		{
 			try
@@ -156,6 +169,21 @@ public class ChatServer implements Runnable
 	private void addThread(Socket socket)
 			throws Exception
 	{
+		if(hasAccessControl)
+		{
+			String clientAddr = socket.getInetAddress().getHostAddress().trim();
+
+			for (String refusedAddr : refusedAddrs)
+			{
+				if(refusedAddr.equalsIgnoreCase(clientAddr))
+				{
+					System.out.println("[LOG] The IP " + refusedAddr + " is in the black-list. The " +
+							"connection with " + clientAddr + " is dropped...");
+					if(socket != null) socket.close();
+				}
+			}
+		}
+
 		if (clientCount < clients.length)
 		{
 			// Adds thread for new accepted client
@@ -184,13 +212,32 @@ public class ChatServer implements Runnable
 	public static void main(String args[])
 	{
 			ChatServer server = null;
+			List<String> accessControl = null;
 
-			if (args.length != 1)
+			if (args.length < 1)
 				// Displays correct usage for server
 				System.out.println("Usage: java ChatServer port");
-			else
-				// Calls new server
-				server = new ChatServer(Integer.parseInt(args[0]));
+			else if(args.length >= 1)
+			{
+				if(args.length == 1)
+				{
+					// Calls new server
+					server = new ChatServer(Integer.parseInt(args[0]), false, null);
+				}
+				else
+				{
+					// The remaining arguments are connections refused by their source IPs
+					accessControl = new ArrayList<>();
+					System.out.print("[LOG] The messages coming from the following source addresses " +
+							"will be dropped:");
+					for(int i = 1; i < args.length; i++)
+					{
+						System.out.println(" " + args[i]);
+						accessControl.add(args[i]);
+					}
+					// Calls new server
+				}   server = new ChatServer(Integer.parseInt(args[0]), true, accessControl);
+			}
 	}
 
 	// Added

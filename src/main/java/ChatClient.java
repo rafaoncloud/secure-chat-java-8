@@ -15,7 +15,7 @@ public class ChatClient implements Runnable
     private DataOutputStream streamOut = null;
     private ChatClientThread client    = null;
 
-    // Cryptography - Added
+    // Added - Cryptography
     private SymmetricEncryption crypt = null;
 
     public ChatClient(String serverName, int serverPort)

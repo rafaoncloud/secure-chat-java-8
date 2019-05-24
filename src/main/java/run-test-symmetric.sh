@@ -1,3 +1,0 @@
-javac SymmetricCryptography.java
-java SymmetricCryptography
-
