@@ -1,12 +1,10 @@
 package main.java;
 
-import java.io.IOException;
-import java.security.*;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import java.security.cert.Certificate;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 
@@ -24,7 +22,8 @@ public class SymmetricEncryption
 
         System.out.println("[TEST] ------ Secret Message ------ [TEST]");
         System.out.println();
-        try {
+        try
+        {
             crypto1 = new SymmetricEncryption();
             crypto2 = new SymmetricEncryption();
 
@@ -34,45 +33,58 @@ public class SymmetricEncryption
             String plaintext = "This is the secret message!";
             System.out.println("Plain Text: " + plaintext);
             System.out.println("Encrypting...");
-            String ciphertext = crypto1.encrypt(plaintext,Certification.ALIAS_CLIENT_PUBLIC[1],client1.sign(plaintext));
+            String ciphertext = crypto1.encrypt(plaintext, Certification.ALIAS_CLIENT_PUBLIC[1],
+                    client1.sign(plaintext));
             System.out.println("All Cipher Text (Encrypted): " + ciphertext);
 
             System.out.println("Decrypting and checking Integrity (MAC)...");
-            Message decrypted = crypto2.decrypt( ciphertext);
+            Message decrypted = crypto2.decrypt(ciphertext, client2);
             System.out.println("Plain Text: " + decrypted.getPlainText());
             System.out.println("Signature: " + decrypted.getSignature().toString());
             System.out.println("Alias (Identification): " + decrypted.getAliasPublic());
 
 
             System.out.println(decrypted);
-        } catch (CertificateException e) {
+        } catch (CertificateException e)
+        {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e)
+        {
             e.printStackTrace();
-        } catch (KeyStoreException e) {
+        } catch (KeyStoreException e)
+        {
             e.printStackTrace();
-        } catch (InvalidKeyException e) {
+        } catch (InvalidKeyException e)
+        {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
+        } catch (UnrecoverableEntryException e)
+        {
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    public String encrypt(String plaintext, String  aliasPublic, byte[] signature)
-        throws Exception 
+    public String encrypt(String plaintext, String aliasPublic, byte[] signature) throws BadPaddingException,
+            InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
+            NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException
+
     {
         return encrypt(generateIV(), plaintext, aliasPublic, signature);
     }
 
     private String encrypt(byte[] iv, String plaintext, String aliasPublic, byte[] signature)
-            throws Exception
+            throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException,
+            IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException,
+            NoSuchPaddingException
+
     {
         byte[] decrypted = plaintext.getBytes("UTF-8");
-        byte[] mac = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
+        byte[] mac = IntegrityCrypto.generateMAC(decrypted, getKeyDecoded());
         byte[] encrypted = encrypt(iv, decrypted);
         byte[] alias = aliasPublic.getBytes("UTF-8");
 
@@ -91,8 +103,11 @@ public class SymmetricEncryption
         return ciphertext.toString();
     }
 
-    public Message decrypt(String ciphertext)
-            throws Exception
+    public Message decrypt(String ciphertext, Certification cert)
+            throws NoSuchPaddingException, InvalidKeyException,
+            NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException,
+            InvalidAlgorithmParameterException, UnsupportedEncodingException,
+            KeyStoreException, SignatureException
     {
         String[] parts = ciphertext.split(":");
 
@@ -102,16 +117,19 @@ public class SymmetricEncryption
         byte[] mac1 = Base64.getDecoder().decode(parts[2]);
 
         // CHECK INTEGRITY OF THE MESSAGE
-        byte[] mac2 = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
-        if(!IntegrityCrypto.compareMAC(mac1,mac2))
+        byte[] mac2 = IntegrityCrypto.generateMAC(decrypted, getKeyDecoded());
+        if (!IntegrityCrypto.compareMAC(mac1, mac2))
         {
-            throw new Exception("Integrity was compromised (Received MAC1 != Generated MAC) !!!");
+            throw new RuntimeException("Integrity was compromised (Received MAC1 != Generated MAC) !!!");
         }
 
-        byte[] publicAlias = Base64.getDecoder().decode(parts[3]);
+        // VERIFY SIGNATURE
+        byte[] aliasPublic = Base64.getDecoder().decode(parts[3]);
         byte[] signature = Base64.getDecoder().decode(parts[4]);
+        String aliasPublicStr = new String(aliasPublic);
+        cert.verifySignature(decrypted, signature, aliasPublicStr);
 
-        return new Message(decrypted, signature, publicAlias);
+        return new Message(decrypted, signature, aliasPublic);
     }
 
     private Key key;
@@ -120,14 +138,14 @@ public class SymmetricEncryption
     {
         this.key = key;
     }
-    
+
     public SymmetricEncryption()
-        throws Exception 
+            throws Exception
     {
         this(generateSymmetricKey());
     }
 
-    public Key getKey() 
+    public Key getKey()
     {
         return key;
     }
@@ -142,149 +160,44 @@ public class SymmetricEncryption
         return key.getEncoded();
     }
 
-    public void setKey(Key key) 
+    public void setKey(Key key)
     {
         this.key = key;
     }
 
-    public static byte[] generateIV() 
+    public static byte[] generateIV()
     {
         SecureRandom random = new SecureRandom();
-        byte[] iv = new byte [INITIALIZATION_VECTOR_SIZE];
+        byte[] iv = new byte[INITIALIZATION_VECTOR_SIZE];
         random.nextBytes(iv);
         return iv;
     }
 
-    public static Key generateSymmetricKey() 
-        throws Exception 
+    public static Key generateSymmetricKey()
+            throws Exception
     {
         KeyGenerator generator = KeyGenerator.getInstance(ENCRYPTION_ALGORITHM);
         generator.init(KEY_SIZE);
         SecretKey key = generator.generateKey();
         return key;
     }
-    
+
     private byte[] encrypt(byte[] iv, byte[] plaintext)
-        throws Exception 
+            throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException,
+            NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException
+
     {
-        Cipher cipher = Cipher.getInstance( key.getAlgorithm() + "/CBC/PKCS5Padding" );
+        Cipher cipher = Cipher.getInstance(key.getAlgorithm() + "/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
-        return cipher.doFinal( plaintext );
+        return cipher.doFinal(plaintext);
     }
 
     private byte[] decrypt(byte[] iv, byte[] ciphertext)
-        throws Exception 
+            throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException,
+            NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException
     {
-        Cipher cipher = Cipher.getInstance( key.getAlgorithm() + "/CBC/PKCS5Padding" );
+        Cipher cipher = Cipher.getInstance(key.getAlgorithm() + "/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
-        return cipher.doFinal( ciphertext );
+        return cipher.doFinal(ciphertext);
     }
 }
-
-
-/*private SecretKeySpec secretKey;
-private Cipher cipher;
-
-public SymmetricKeyExample(String secret, int length, String algorithm)
-throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException 
-{
-	byte[] key = new byte[length];
-	key = fixSecret(secret, length);
-	this.secretKey = new SecretKeySpec(key, algorithm);
-	this.cipher = Cipher.getInstance(algorithm);
-}
-
-private byte[] fixSecret(String s, int length) 
-	throws UnsupportedEncodingException 
-{
-    if (s.length() < length) 
-    {
-		int missingLength = length - s.length();
-        for (int i = 0; i < missingLength; i++) 
-        {
-			s += " ";
-		}
-	}
-	return s.substring(0, length).getBytes("UTF-8");
-}
-
-public void encryptFile(File f)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException 
-{
-	System.out.println("Encrypting file: " + f.getName());
-	this.cipher.init(Cipher.ENCRYPT_MODE, this.secretKey);
-	this.writeToFile(f);
-}
-
-public void decryptFile(File f)
-        throws InvalidKeyException, IOException, IllegalBlockSizeException, BadPaddingException 
-{
-	System.out.println("Decrypting file: " + f.getName());
-	this.cipher.init(Cipher.DECRYPT_MODE, this.secretKey);
-	this.writeToFile(f);
-}
-
-public void writeToFile(File f) throws IOException, IllegalBlockSizeException, BadPaddingException 
-{
-	FileInputStream in = new FileInputStream(f);
-	byte[] input = new byte[(int) f.length()];
-	in.read(input);
-
-	FileOutputStream out = new FileOutputStream(f);
-	byte[] output = this.cipher.doFinal(input);
-	out.write(output);
-
-	out.flush();
-	out.close();
-	in.close();
-}
-
-public static void main(String[] args) 
-{
-	File dir = new File("src/symmetricKey");
-	File[] filelist = dir.listFiles();
-
-	SymmetricKeyExample ske;
-	try {
-		ske = new SymmetricKeyExample("!@#$MySecr3tPassw0rd", 16, "AES");
-
-		int choice = -2;
-		while (choice != -1) {
-			String[] options = { "Encrypt All", "Decrypt All", "Exit" };
-			choice = JOptionPane.showOptionDialog(null, "Select an option", "Options", 0,
-					JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-			switch (choice) {
-			case 0:
-				Arrays.asList(filelist).forEach(file -> {
-					try {
-						ske.encryptFile(file);
-					} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
-							| IOException e) {
-						System.err.println("Couldn't encrypt " + file.getName() + ": " + e.getMessage());
-					}
-				});
-				System.out.println("Files encrypted successfully");
-				break;
-			case 1:
-				Arrays.asList(filelist).forEach(file -> {
-					try {
-						ske.decryptFile(file);
-					} catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
-							| IOException e) {
-						System.err.println("Couldn't decrypt " + file.getName() + ": " + e.getMessage());
-					}
-				});
-				System.out.println("Files decrypted successfully");
-				break;
-			default:
-				choice = -1;
-				break;
-			}
-		}
-	} catch (UnsupportedEncodingException ex) {
-		System.err.println("Couldn't create key: " + ex.getMessage());
-	} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-		System.err.println(e.getMessage());
-    }
-}*/
