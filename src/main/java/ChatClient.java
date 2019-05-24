@@ -4,6 +4,11 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.*;
 import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 import java.util.Base64;
 
 
@@ -16,14 +21,17 @@ public class ChatClient implements Runnable
     private ChatClientThread client    = null;
 
     // Added - Cryptography
-    private SymmetricEncryption crypt = null;
+    private SymmetricEncryption crypt  = null;
+    private Certification cert         = null;
 
-    public ChatClient(String serverName, int serverPort)
-    {  
+    public ChatClient(String serverName, int serverPort, int clientID)
+    {
         System.out.println("Establishing connection to server...");
-        
         try
         {
+            System.out.println("[LOG] Reading up certification key stores and set up signature");
+            cert = new Certification(clientID);
+
             // Establishes connection with server (name and port)
             socket = new Socket(serverName, serverPort);
             System.out.println("Connected to server: " + socket);
@@ -41,9 +49,20 @@ public class ChatClient implements Runnable
         {  
             // Other error establishing connection
             System.out.println("Error establishing connection - unexpected exception: " + ioexception.getMessage()); 
+        } // Added
+        catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
         }
-        
-   }
+
+    }
     
    public void run()
    {
@@ -55,7 +74,8 @@ public class ChatClient implements Runnable
            {
                // Added - Encrypt Message
                msg = console.readLine();
-               String encryptedMsg = crypt.encrypt(msg);
+               //String encryptedMsg = crypt.encrypt(msg);
+               String encryptedMsg = crypt.encrypt(msg,cert.getMyPublicAlias(),cert.sign(msg));
 
                // Sends message from console to server
                streamOut.writeUTF(encryptedMsg);
@@ -78,7 +98,7 @@ public class ChatClient implements Runnable
         // Added - Decrypted Message
         String decryptedMsg = null;
         try {
-            decryptedMsg = crypt.decrypt(msg);
+            decryptedMsg = crypt.decrypt(msg).getPlainText();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,12 +171,12 @@ public class ChatClient implements Runnable
     public static void main(String args[])
     {  
         ChatClient client = null;
-        if (args.length != 2)
+        if (args.length != 3)
             // Displays correct usage syntax on stdout
-            System.out.println("Usage: java ChatClient host port");
+            System.out.println("Usage: java ChatClient host port clientID");
         else
             // Calls new client
-            client = new ChatClient(args[0], Integer.parseInt(args[1]));
+            client = new ChatClient(args[0], Integer.parseInt(args[1]),Integer.parseInt(args[2]));
     }
     
 }

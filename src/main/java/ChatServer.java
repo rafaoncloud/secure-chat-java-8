@@ -4,8 +4,8 @@ import javax.crypto.SecretKey;
 import java.net.*;
 import java.io.*;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -28,6 +28,9 @@ public class ChatServer implements Runnable
 	// Added - Cryptography
 	SymmetricEncryption[] crypt = new SymmetricEncryption[MAX_CLIENTS];
 
+	//Added - Signature
+	Certification cert = null;
+
 	public ChatServer(int port, boolean hasAccessControl, List<String> refusedAddrs)
 	{
 		// Drops connection coming from certain addresses
@@ -39,6 +42,9 @@ public class ChatServer implements Runnable
 
 		try
 		{
+			System.out.println("[LOG] Reading up certification key stores and set up signature");
+			cert = new Certification();
+
 			// Binds to port and starts server
 			System.out.println("Binding to port " + port);
 			server_socket = new ServerSocket(port);
@@ -49,6 +55,17 @@ public class ChatServer implements Runnable
 		{
 			// Error binding to port
 			System.out.println("Binding error (port=" + port + "): " + ioexception.getMessage());
+		} // Added
+		catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (UnrecoverableEntryException e) {
+			e.printStackTrace();
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -105,7 +122,7 @@ public class ChatServer implements Runnable
 			throws Exception {
 		// Added - Decrypt message with the correspondent client Key
 		int clientIndex = findClient(ID);
-		String decryptedMsg = crypt[clientIndex].decrypt(input);
+		Message decryptedMsg = crypt[clientIndex].decrypt(input);
 		String encryptedMsg = null;
 
 		if (decryptedMsg.equals(".quit"))
@@ -120,7 +137,7 @@ public class ChatServer implements Runnable
 				{
 					// Added - Encrypt message with the correspondent client key
 					String msg = "Client " + ID + " exits..";
-					encryptedMsg = crypt[i].encrypt(msg);
+					encryptedMsg = crypt[i].encrypt(msg,Certification.ALIAS_PUBLIC,cert.sign(msg));
 					clients[i].send(encryptedMsg);
 				}
 			}
@@ -131,8 +148,8 @@ public class ChatServer implements Runnable
 			for (int i = 0; i < clientCount; i++)
 			{
 				// Added - Encrypt message with the correspondent client key
-				String msg = ID + ": " + decryptedMsg;
-				encryptedMsg = crypt[i].encrypt(msg);
+				String msg = ID + " [" + decryptedMsg.getAliasPublic() +   "]: "  + decryptedMsg.getPlainText();
+				encryptedMsg = crypt[i].encrypt(msg,decryptedMsg.getAliasPublic(),decryptedMsg.getSignature());
 				clients[i].send(encryptedMsg);
 			}
 		}

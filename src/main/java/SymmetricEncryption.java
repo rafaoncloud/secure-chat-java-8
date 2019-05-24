@@ -1,11 +1,13 @@
 package main.java;
 
-import java.security.Key;
-import java.security.SecureRandom;
+import java.io.IOException;
+import java.security.*;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.util.Base64;
 
 public class SymmetricEncryption
@@ -15,44 +17,81 @@ public class SymmetricEncryption
     public static final int KEY_SIZE = 192;
     public static final String ENCRYPTION_ALGORITHM = "AES";
 
-    public static void main(String[] args) 
-        throws Exception 
+    public static void main(String[] args)
     {
-        SymmetricEncryption  crypto = new SymmetricEncryption();
+        SymmetricEncryption crypto1 = null;
+        SymmetricEncryption crypto2 = null;
 
-        String plaintext = "[Test] Secret Message";
-        System.out.println(plaintext);
+        System.out.println("[TEST] ------ Secret Message ------ [TEST]");
+        System.out.println();
+        try {
+            crypto1 = new SymmetricEncryption();
+            crypto2 = new SymmetricEncryption();
 
-        String ciphertext = crypto.encrypt(plaintext);
-        System.out.println(ciphertext);
+            Certification client1 = new Certification(1);
+            Certification client2 = new Certification(2);
 
-        String decrypted = crypto.decrypt(ciphertext);
-        System.out.println(decrypted);
+            String plaintext = "This is the secret message!";
+            System.out.println("Plain Text: " + plaintext);
+            System.out.println("Encrypting...");
+            String ciphertext = crypto1.encrypt(plaintext,Certification.ALIAS_CLIENT_PUBLIC[1],client1.sign(plaintext));
+            System.out.println("All Cipher Text (Encrypted): " + ciphertext);
+
+            System.out.println("Decrypting and checking Integrity (MAC)...");
+            Message decrypted = crypto2.decrypt( ciphertext);
+            System.out.println("Plain Text: " + decrypted.getPlainText());
+            System.out.println("Signature: " + decrypted.getSignature().toString());
+            System.out.println("Alias (Identification): " + decrypted.getAliasPublic());
+
+
+            System.out.println(decrypted);
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public String encrypt(String plaintext) 
+    public String encrypt(String plaintext, String  aliasPublic, byte[] signature)
         throws Exception 
     {
-        return encrypt(generateIV(), plaintext);
+        return encrypt(generateIV(), plaintext, aliasPublic, signature);
     }
 
-    public String encrypt(byte[] iv, String plaintext)
+    private String encrypt(byte[] iv, String plaintext, String aliasPublic, byte[] signature)
             throws Exception
     {
         byte[] decrypted = plaintext.getBytes("UTF-8");
         byte[] mac = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
         byte[] encrypted = encrypt(iv, decrypted);
+        byte[] alias = aliasPublic.getBytes("UTF-8");
 
         StringBuilder ciphertext = new StringBuilder();
         ciphertext.append(Base64.getEncoder().encodeToString(iv));
         ciphertext.append(":");
         ciphertext.append(Base64.getEncoder().encodeToString(encrypted));
+        // INTEGRITY - MAC
         ciphertext.append(":");
         ciphertext.append(Base64.getEncoder().encodeToString(mac));
+        // SIGNATURE
+        ciphertext.append(":");
+        ciphertext.append(Base64.getEncoder().encodeToString(alias));
+        ciphertext.append(":");
+        ciphertext.append(Base64.getEncoder().encodeToString(signature));
         return ciphertext.toString();
     }
 
-    public String decrypt(String ciphertext)
+    public Message decrypt(String ciphertext)
             throws Exception
     {
         String[] parts = ciphertext.split(":");
@@ -62,13 +101,17 @@ public class SymmetricEncryption
         byte[] decrypted = decrypt(iv, encrypted);
         byte[] mac1 = Base64.getDecoder().decode(parts[2]);
 
+        // CHECK INTEGRITY OF THE MESSAGE
         byte[] mac2 = IntegrityCrypto.generateMAC(decrypted,getKeyDecoded());
         if(!IntegrityCrypto.compareMAC(mac1,mac2))
         {
             throw new Exception("Integrity was compromised (Received MAC1 != Generated MAC) !!!");
         }
 
-        return new String(decrypted);
+        byte[] publicAlias = Base64.getDecoder().decode(parts[3]);
+        byte[] signature = Base64.getDecoder().decode(parts[4]);
+
+        return new Message(decrypted, signature, publicAlias);
     }
 
     private Key key;
@@ -121,7 +164,7 @@ public class SymmetricEncryption
         return key;
     }
     
-    public byte[] encrypt(byte[] iv, byte[] plaintext) 
+    private byte[] encrypt(byte[] iv, byte[] plaintext)
         throws Exception 
     {
         Cipher cipher = Cipher.getInstance( key.getAlgorithm() + "/CBC/PKCS5Padding" );
@@ -129,7 +172,7 @@ public class SymmetricEncryption
         return cipher.doFinal( plaintext );
     }
 
-    public byte[] decrypt(byte[] iv, byte[] ciphertext) 
+    private byte[] decrypt(byte[] iv, byte[] ciphertext)
         throws Exception 
     {
         Cipher cipher = Cipher.getInstance( key.getAlgorithm() + "/CBC/PKCS5Padding" );
