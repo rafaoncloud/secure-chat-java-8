@@ -1,5 +1,21 @@
 #### This is an academic assignment where we applied security policies in a chat service. Consider it only for learning purposes.
 
+# Table of Content
+
+- [1. Introduction](#1-introduction)
+- [2. Security Model](#2-security-model)
+  * [2.1. Confidentiality](#21-confidentiality)
+  * [2.2. Authenticity](#22-authenticity)
+  * [2.3. Integrity](#23-integrity)
+  * [2.4. Non-repudiation](#24-non-repudiation)
+  * [2.5. Access Control](#25-access-control)
+  * [2.6. Other security-related functionalities](#26-other-security-related-functionalities)
+- [3. Implementation](#3-implementation)
+  * [3.1. Certifications](#31-certifications)
+  * [3.2. Signature](#32-signature)
+  * [3.3. Message Content](#33-message-content)
+- [4. Conclusions](#4-conclusions)
+
 # 1. Introduction 
 
 Security is one of the major concerns in the informatic technologies world. In this assignment, our task is implement a secure chat service in a ordinary client-server style system. The source code of the chat service is provided, however it does not provide any security policies. In order to apply those security policies, firstly we define the well-known security model used to identify and impose security policies. The security requirement are also provided, so the choice of the mechanics is a straight-forward task, since we are guided by the most widely used ones.
@@ -74,7 +90,7 @@ A client sends a messages, this message is signed by the client, this is, his si
 
 In this work, we have two kinds of message, the initial message where the server send a symmetric encryption key to the client encoded in base64 and the message with the actual information. This message can be broken in the following ordered parts: initialization vector + cipher-text + MAC + alias + signature. The IV and the symmetric encryption key are used to decrypt the cipher-text, then a MAC is calculated again and checked against the received one to figure if the message was tampered. Then, the alias is used to identify the message writer and find the public key to verify the signature to ensure both authenticity and non-repudiation.
 
-# Conclusions
+# 4. Conclusions
 Security is one of the major concerns in the informatics technologies world. In this work, we applied a set of security mechanisms to ensure security in a client-server application. Before implement those mechanisms, we designed the security model that describes the policies we choose to ensure the security requirements proposed to this work.
 Both client and server applications are written in Java, so we were restricted to its security API, however this is probably one of the most widely used APIs to ensure security in server applications. 
 The cipher-text is the only encrypted information in each message transmitted, the remaining data, IV, MAC, signature and alias are not encrypted, yet they are encoded in base64 format. Even the symmetric key to ensure integrity in sent in base64 format. This is a security vulnerability, every one can intercept the messages and tamper the signature, for instance. Moveover, we read the public-keys from the same \textit{KeyStore}, the server one, since we reuse most of the code produced to the client and server.
