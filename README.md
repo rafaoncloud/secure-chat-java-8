@@ -1,4 +1,4 @@
-#### This is an academic assignment were we applied security policies in a chat service. Consider it only for learning purposes.
+#### This is an academic assignment where we applied security policies in a chat service. Consider it only for learning purposes.
 
 # 1. Introduction 
 
